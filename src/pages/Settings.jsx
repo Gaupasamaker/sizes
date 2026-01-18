@@ -3,6 +3,7 @@ import { Download, Upload, Info, CheckCircle, AlertTriangle, Sun, Moon } from 'l
 import Layout from '../components/Layout';
 import { exportData, importData } from '../services/db';
 import { useTheme } from '../hooks/useTheme';
+import { useLanguage } from '../hooks/useLanguage';
 import './Settings.css';
 
 export default function Settings() {
@@ -10,14 +11,15 @@ export default function Settings() {
     const [message, setMessage] = useState(null);
     const fileInputRef = useRef(null);
     const { theme, toggleTheme } = useTheme();
+    const { language, t } = useLanguage();
 
     async function handleExport() {
         try {
             await exportData();
-            showMessage('success', 'Datos exportados correctamente');
+            showMessage('success', t('export_success'));
         } catch (error) {
             console.error('Error exporting:', error);
-            showMessage('error', 'Error al exportar los datos');
+            showMessage('error', t('export_error'));
         }
     }
 
@@ -29,7 +31,7 @@ export default function Settings() {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        if (!confirm('¿Importar datos? Esto reemplazará todos los datos actuales.')) {
+        if (!confirm(t('import_confirm'))) {
             e.target.value = '';
             return;
         }
@@ -37,10 +39,10 @@ export default function Settings() {
         setImporting(true);
         try {
             const result = await importData(file);
-            showMessage('success', `Importados: ${result.profiles} perfiles, ${result.brands} marcas, ${result.sizes} tallas`);
+            showMessage('success', `${t('import_success')} ${result.profiles} perfiles, ${result.brands} marcas, ${result.sizes} tallas`);
         } catch (error) {
             console.error('Error importing:', error);
-            showMessage('error', 'Error al importar. Verifica que el archivo es válido.');
+            showMessage('error', t('import_error'));
         } finally {
             setImporting(false);
             e.target.value = '';
@@ -53,11 +55,11 @@ export default function Settings() {
     }
 
     return (
-        <Layout title="Ajustes">
+        <Layout title={t('settings')}>
             <div className="settings-container animate-fadeIn">
                 {/* Appearance section */}
                 <section className="settings-section">
-                    <h3 className="settings-section-title">Apariencia</h3>
+                    <h3 className="settings-section-title">{t('appearance')}</h3>
 
                     <div className="settings-card card">
                         <div className="settings-item" onClick={toggleTheme}>
@@ -65,8 +67,8 @@ export default function Settings() {
                                 {theme === 'dark' ? <Moon size={20} /> : <Sun size={20} />}
                             </div>
                             <div className="settings-item-content">
-                                <h4>Tema {theme === 'dark' ? 'Oscuro' : 'Claro'}</h4>
-                                <p>Toca para cambiar al modo {theme === 'dark' ? 'claro' : 'oscuro'}</p>
+                                <h4>{theme === 'dark' ? t('theme_dark') : t('theme_light')}</h4>
+                                <p>{t('tap_to_switch')} {theme === 'dark' ? (language === 'es' ? 'claro' : 'light mode') : (language === 'es' ? 'oscuro' : 'dark mode')}</p>
                             </div>
                             <div className="theme-toggle">
                                 <div className={`toggle-switch ${theme === 'light' ? 'active' : ''}`}>
@@ -79,7 +81,7 @@ export default function Settings() {
 
                 {/* Export/Import section */}
                 <section className="settings-section">
-                    <h3 className="settings-section-title">Copia de seguridad</h3>
+                    <h3 className="settings-section-title">{t('backup')}</h3>
 
                     <div className="settings-card card">
                         <div className="settings-item" onClick={handleExport}>
@@ -87,8 +89,8 @@ export default function Settings() {
                                 <Download size={20} />
                             </div>
                             <div className="settings-item-content">
-                                <h4>Exportar datos</h4>
-                                <p>Descarga un archivo JSON con todos tus datos</p>
+                                <h4>{t('export_data')}</h4>
+                                <p>{t('export_desc')}</p>
                             </div>
                         </div>
 
@@ -99,8 +101,8 @@ export default function Settings() {
                                 <Upload size={20} />
                             </div>
                             <div className="settings-item-content">
-                                <h4>{importing ? 'Importando...' : 'Importar datos'}</h4>
-                                <p>Restaura datos desde un archivo de copia de seguridad</p>
+                                <h4>{importing ? t('importing') : t('import_data')}</h4>
+                                <p>{t('import_desc')}</p>
                             </div>
                         </div>
 
@@ -116,7 +118,7 @@ export default function Settings() {
 
                 {/* App info section */}
                 <section className="settings-section">
-                    <h3 className="settings-section-title">Información</h3>
+                    <h3 className="settings-section-title">{t('info')}</h3>
 
                     <div className="settings-card card">
                         <div className="settings-item">
@@ -125,7 +127,7 @@ export default function Settings() {
                             </div>
                             <div className="settings-item-content">
                                 <h4>Sizes</h4>
-                                <p>Versión 1.1.0</p>
+                                <p>{t('version')} 1.3.0</p>
                             </div>
                         </div>
                     </div>
@@ -134,11 +136,8 @@ export default function Settings() {
                 {/* Install PWA hint */}
                 <section className="settings-section">
                     <div className="pwa-hint card">
-                        <h4>💡 Instala la app</h4>
-                        <p>
-                            En Chrome o Safari, pulsa el menú (⋮) y selecciona "Añadir a pantalla de inicio" o "Instalar"
-                            para tener Sizes como una app en tu dispositivo.
-                        </p>
+                        <h4>💡 {t('install_app')}</h4>
+                        <p>{t('install_hint')}</p>
                     </div>
                 </section>
             </div>

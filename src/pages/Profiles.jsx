@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Plus, User, Trash2, Edit2, Ruler, Share2, CheckCircle } from 'lucide-react';
+import { Plus, User, Trash2, Edit2, Ruler, Share2, CheckCircle, Globe } from 'lucide-react';
 import Layout from '../components/Layout';
 import Modal from '../components/Modal';
 import { getProfiles, createProfile, updateProfile, deleteProfile, PROFILE_COLORS } from '../services/db';
 import { generateShareLink, copyToClipboard, nativeShare } from '../services/share';
+import { useLanguage } from '../hooks/useLanguage';
 import './Profiles.css';
 
 export default function Profiles() {
@@ -15,6 +16,7 @@ export default function Profiles() {
     const [formData, setFormData] = useState({ name: '', color: 'blue' });
     const [shareMessage, setShareMessage] = useState(null);
     const navigate = useNavigate();
+    const { language, setLanguage, t } = useLanguage();
 
     useEffect(() => {
         loadProfiles();
@@ -67,7 +69,7 @@ export default function Profiles() {
 
     async function handleDelete(id, e) {
         e.stopPropagation();
-        if (confirm('¿Eliminar este perfil y todas sus tallas?')) {
+        if (confirm(t('delete_profile_confirm'))) {
             try {
                 await deleteProfile(id);
                 await loadProfiles();
@@ -87,17 +89,15 @@ export default function Profiles() {
         try {
             const url = await generateShareLink(profile.id);
 
-            // Try native share first
             const shared = await nativeShare(
-                `Tallas de ${profile.name}`,
-                `Mira mis tallas de ropa`,
+                `${t('share_title')} ${profile.name}`,
+                t('share_text'),
                 url
             );
 
             if (!shared) {
-                // Fallback to copy
                 await copyToClipboard(url);
-                setShareMessage(`Link copiado para ${profile.name}`);
+                setShareMessage(`${t('link_copied')} ${profile.name}`);
                 setTimeout(() => setShareMessage(null), 3000);
             }
         } catch (error) {
@@ -105,32 +105,42 @@ export default function Profiles() {
         }
     }
 
+    function toggleLanguage() {
+        setLanguage(language === 'es' ? 'en' : 'es');
+    }
+
     if (loading) {
         return (
-            <Layout title="Sizes">
+            <Layout title={t('app_name')}>
                 <div className="empty-state">
-                    <p>Cargando...</p>
+                    <p>{t('loading')}</p>
                 </div>
             </Layout>
         );
     }
 
     return (
-        <Layout title="Sizes">
+        <Layout title={t('app_name')}>
+            {/* Language selector */}
+            <button className="language-selector" onClick={toggleLanguage} title={t('language')}>
+                <Globe size={18} />
+                <span>{language === 'es' ? 'ES' : 'EN'}</span>
+            </button>
+
             {/* Size Guide Link */}
             <Link to="/size-guide" className="size-guide-link card animate-fadeIn">
                 <Ruler size={24} />
                 <div>
-                    <h4>Guía de Tallas</h4>
-                    <p>Consulta equivalencias EU/UK/US</p>
+                    <h4>{t('size_guide')}</h4>
+                    <p>{t('size_guide_subtitle')}</p>
                 </div>
             </Link>
 
             {profiles.length === 0 ? (
                 <div className="empty-state animate-fadeIn">
                     <User size={64} />
-                    <h3>Sin perfiles</h3>
-                    <p>Añade un perfil para empezar a guardar tus tallas</p>
+                    <h3>{t('no_profiles')}</h3>
+                    <p>{t('add_profile_hint')}</p>
                 </div>
             ) : (
                 <div className="profiles-grid animate-slideUp">
@@ -150,21 +160,21 @@ export default function Profiles() {
                                 <button
                                     className="btn btn-ghost btn-icon"
                                     onClick={(e) => handleShare(profile, e)}
-                                    title="Compartir"
+                                    title={t('share')}
                                 >
                                     <Share2 size={18} />
                                 </button>
                                 <button
                                     className="btn btn-ghost btn-icon"
                                     onClick={(e) => handleEdit(profile, e)}
-                                    title="Editar"
+                                    title={t('edit')}
                                 >
                                     <Edit2 size={18} />
                                 </button>
                                 <button
                                     className="btn btn-ghost btn-icon"
                                     onClick={(e) => handleDelete(profile.id, e)}
-                                    title="Eliminar"
+                                    title={t('delete')}
                                 >
                                     <Trash2 size={18} />
                                 </button>
@@ -189,15 +199,15 @@ export default function Profiles() {
             <Modal
                 isOpen={modalOpen}
                 onClose={closeModal}
-                title={editingProfile ? 'Editar perfil' : 'Nuevo perfil'}
+                title={editingProfile ? t('edit_profile') : t('new_profile')}
             >
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="name">Nombre</label>
+                        <label htmlFor="name">{t('profile_name')}</label>
                         <input
                             id="name"
                             type="text"
-                            placeholder="Ej: Juan, Mi hijo..."
+                            placeholder={t('profile_name_placeholder')}
                             value={formData.name}
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                             autoFocus
@@ -205,7 +215,7 @@ export default function Profiles() {
                     </div>
 
                     <div className="form-group">
-                        <label>Color</label>
+                        <label>{t('color')}</label>
                         <div className="color-picker">
                             {PROFILE_COLORS.map((color) => (
                                 <button
@@ -222,10 +232,10 @@ export default function Profiles() {
 
                     <div className="modal-actions">
                         <button type="button" className="btn btn-secondary" onClick={closeModal}>
-                            Cancelar
+                            {t('cancel')}
                         </button>
                         <button type="submit" className="btn btn-primary">
-                            {editingProfile ? 'Guardar' : 'Crear'}
+                            {editingProfile ? t('save') : t('create')}
                         </button>
                     </div>
                 </form>

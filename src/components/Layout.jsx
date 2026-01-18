@@ -1,10 +1,12 @@
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Users, Settings, ChevronLeft } from 'lucide-react';
+import { useLanguage } from '../hooks/useLanguage';
 import './Layout.css';
 
 export default function Layout({ children, title, showBack = false }) {
     const location = useLocation();
     const navigate = useNavigate();
+    const { t } = useLanguage();
 
     const isProfiles = location.pathname === '/' || location.pathname.startsWith('/profile');
     const isSettings = location.pathname === '/settings';
@@ -33,14 +35,14 @@ export default function Layout({ children, title, showBack = false }) {
                     className={`nav-item ${isProfiles ? 'active' : ''}`}
                 >
                     <Users size={24} />
-                    <span>Perfiles</span>
+                    <span>{t('profiles')}</span>
                 </NavLink>
                 <NavLink
                     to="/settings"
                     className={`nav-item ${isSettings ? 'active' : ''}`}
                 >
                     <Settings size={24} />
-                    <span>Ajustes</span>
+                    <span>{t('settings')}</span>
                 </NavLink>
             </nav>
         </div>

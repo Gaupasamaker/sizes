@@ -1,3 +1,29 @@
+/* Language selector */
+.language-selector {
+    position: absolute;
+    top: calc(var(--spacing-md) + 60px);
+    right: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    z-index: 5;
+}
+
+.language-selector:hover {
+    background: var(--surface-light);
+    color: var(--primary-light);
+    border-color: var(--primary);
+}
+
 /* Size Guide Link */
 .size-guide-link {
     display: flex;
