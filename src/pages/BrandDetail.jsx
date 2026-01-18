@@ -199,7 +199,7 @@ export default function BrandDetail() {
         if (!option || fit === 'normal') return null;
         return (
             <span className={`fit-badge fit-${fit}`}>
-                {option.icon} {option.name}
+                {option.icon} {t(`fit_${option.id}`)}
             </span>
         );
     }
@@ -243,7 +243,7 @@ export default function BrandDetail() {
                         <div key={category.id} className="category-section">
                             <h3 className="category-title">
                                 <span className="category-icon">{category.icon}</span>
-                                {category.name}
+                                {t(`cat_${category.id}`)}
                             </h3>
 
                             {categorySizes.length === 0 ? (
@@ -334,7 +334,7 @@ export default function BrandDetail() {
                                     onClick={() => setSizeForm({ ...sizeForm, category: cat.id })}
                                 >
                                     <span className="category-option-icon">{cat.icon}</span>
-                                    <span className="category-option-name">{cat.name}</span>
+                                    <span className="category-option-name">{t(`cat_${cat.id}`)}</span>
                                 </button>
                             ))}
                         </div>
@@ -363,7 +363,7 @@ export default function BrandDetail() {
                                     onClick={() => setSizeForm({ ...sizeForm, fit: fit.id })}
                                 >
                                     <span>{fit.icon}</span>
-                                    <span>{fit.name}</span>
+                                    <span>{t(`fit_${fit.id}`)}</span>
                                 </button>
                             ))}
                         </div>

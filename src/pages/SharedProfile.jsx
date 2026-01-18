@@ -28,7 +28,7 @@ export default function SharedProfile() {
         if (!option || fit === 'normal') return null;
         return (
             <span className={`fit-badge fit-${fit}`}>
-                {option.icon} {option.name}
+                {option.icon} {t(`fit_${option.id}`)}
             </span>
         );
     }
