@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Plus, User, Trash2, Edit2, Ruler, Share2, CheckCircle, Globe } from 'lucide-react';
+import { Plus, User, Trash2, Edit2, Ruler, Share2, CheckCircle } from 'lucide-react';
 import Layout from '../components/Layout';
 import Modal from '../components/Modal';
 import { getProfiles, createProfile, updateProfile, deleteProfile, PROFILE_COLORS } from '../services/db';
@@ -105,10 +105,6 @@ export default function Profiles() {
         }
     }
 
-    function toggleLanguage() {
-        setLanguage(language === 'es' ? 'en' : 'es');
-    }
-
     if (loading) {
         return (
             <Layout title={t('app_name')}>
@@ -121,12 +117,6 @@ export default function Profiles() {
 
     return (
         <Layout title={t('app_name')}>
-            {/* Language selector */}
-            <button className="language-selector" onClick={toggleLanguage} title={t('language')}>
-                <Globe size={18} />
-                <span>{language === 'es' ? 'ES' : 'EN'}</span>
-            </button>
-
             {/* Size Guide Link */}
             <Link to="/size-guide" className="size-guide-link card animate-fadeIn">
                 <Ruler size={24} />

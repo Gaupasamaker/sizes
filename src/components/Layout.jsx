@@ -1,15 +1,19 @@
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { Users, Settings, ChevronLeft } from 'lucide-react';
+import { Users, Settings, ChevronLeft, Globe } from 'lucide-react';
 import { useLanguage } from '../hooks/useLanguage';
 import './Layout.css';
 
 export default function Layout({ children, title, showBack = false }) {
     const location = useLocation();
     const navigate = useNavigate();
-    const { t } = useLanguage();
+    const { language, setLanguage, t } = useLanguage();
 
     const isProfiles = location.pathname === '/' || location.pathname.startsWith('/profile');
     const isSettings = location.pathname === '/settings';
+
+    function toggleLanguage() {
+        setLanguage(language === 'es' ? 'en' : 'es');
+    }
 
     return (
         <div className="layout">
@@ -21,6 +25,11 @@ export default function Layout({ children, title, showBack = false }) {
                     </button>
                 )}
                 <h1 className="header-title">{title || 'Sizes'}</h1>
+
+                <button className="language-selector" onClick={toggleLanguage} title={t('language')}>
+                    <Globe size={16} />
+                    <span>{language.toUpperCase()}</span>
+                </button>
             </header>
 
             {/* Main content */}
@@ -48,3 +57,4 @@ export default function Layout({ children, title, showBack = false }) {
         </div>
     );
 }
+

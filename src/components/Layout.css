@@ -23,8 +23,31 @@
 }
 
 .header-title {
+    flex: 1;
     font-size: 1.25rem;
     font-weight: 600;
+}
+
+/* Language selector in header */
+.language-selector {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.language-selector:hover {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary-light);
+    border-color: var(--primary);
 }
 
 /* Main content */
