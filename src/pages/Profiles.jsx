@@ -171,7 +171,7 @@ export default function Profiles() {
                         return (
                             <div
                                 key={profile.id}
-                                className={`profile-card card card-interactive profile-border-${profile.color}`}
+                                className={`profile-card card card-interactive profile-color-${profile.color} profile-border-${profile.color}`}
                                 onClick={() => navigate(`/profile/${profile.id}`)}
                             >
                                 <div className="profile-header">
