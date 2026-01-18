@@ -139,106 +139,112 @@ export default function Brands() {
 
     return (
         <Layout title={profile?.name || t('brands')} showBack>
-            {/* Search bar */}
-            <div className="search-bar">
-                <Search size={20} className="search-icon" />
-                <input
-                    type="text"
-                    placeholder={t('search_brand')}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                {searchQuery && (
-                    <button className="btn btn-ghost btn-icon search-clear" onClick={() => setSearchQuery('')}>
-                        <X size={18} />
-                    </button>
-                )}
-            </div>
-
-            {brands.length === 0 ? (
-                <div className="empty-state animate-fadeIn">
-                    <Tag size={64} />
-                    <h3>{searchQuery ? t('no_results') : t('no_brands')}</h3>
-                    <p>{searchQuery ? t('try_another_search') : t('add_brand_hint')}</p>
+            <div className={`brands-page profile-color-${profile?.color || 'blue'}`}>
+                {/* Search bar */}
+                <div className="search-bar">
+                    <Search size={20} className="search-icon" />
+                    <input
+                        type="text"
+                        placeholder={t('search_brand')}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    {searchQuery && (
+                        <button className="btn btn-ghost btn-icon search-clear" onClick={() => setSearchQuery('')}>
+                            <X size={18} />
+                        </button>
+                    )}
                 </div>
-            ) : (
-                <div className="brands-list animate-slideUp">
-                    {brands.map((brand) => (
-                        <div
-                            key={brand.id}
-                            className="brand-card card card-interactive"
-                            onClick={() => navigate(`/brand/${brand.id}`)}
-                        >
-                            <div className="brand-info">
-                                <h3 className="brand-name">{brand.name}</h3>
-                                <div className="brand-sizes">
-                                    {getSizeSummary(brand.id) || <span className="text-muted">{t('no_sizes')}</span>}
+
+                {brands.length === 0 ? (
+                    <div className="empty-state animate-fadeIn">
+                        <Tag size={64} />
+                        <h3>{searchQuery ? t('no_results') : t('no_brands')}</h3>
+                        <p>{searchQuery ? t('try_another_search') : t('add_brand_hint')}</p>
+                    </div>
+                ) : (
+                    <div className="brands-list animate-slideUp">
+                        {brands.map((brand) => (
+                            <div
+                                key={brand.id}
+                                className="brand-card card card-interactive"
+                                onClick={() => navigate(`/brand/${brand.id}`)}
+                            >
+                                <div className="brand-info">
+                                    <h3 className="brand-name">{brand.name}</h3>
+                                    <div className="brand-sizes">
+                                        {getSizeSummary(brand.id) || <span className="text-muted">{t('no_sizes')}</span>}
+                                    </div>
                                 </div>
+                                <ChevronRight size={20} className="text-muted" />
                             </div>
-                            <ChevronRight size={20} className="text-muted" />
+                        ))}
+                    </div>
+                )}
+
+                <button
+                    className="fab"
+                    onClick={openModal}
+                    style={{ backgroundColor: 'var(--profile-color)' }}
+                >
+                    <Plus size={24} />
+                </button>
+
+                <Modal isOpen={modalOpen} onClose={closeModal} title={t('new_brand')}>
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-group">
+                            <label htmlFor="brandName">{t('brand_name')}</label>
+                            <div className="autocomplete-container">
+                                <input
+                                    ref={inputRef}
+                                    id="brandName"
+                                    type="text"
+                                    placeholder={t('brand_name_placeholder')}
+                                    value={formData.name}
+                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                    onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
+                                    autoFocus
+                                    autoComplete="off"
+                                />
+                                {showSuggestions && (
+                                    <div className="suggestions-dropdown">
+                                        {suggestions.map((name, i) => (
+                                            <button
+                                                key={i}
+                                                type="button"
+                                                className="suggestion-item"
+                                                onClick={() => selectSuggestion(name)}
+                                            >
+                                                {name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                    ))}
-                </div>
-            )}
 
-            <button className="fab" onClick={openModal}>
-                <Plus size={24} />
-            </button>
-
-            <Modal isOpen={modalOpen} onClose={closeModal} title={t('new_brand')}>
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="brandName">{t('brand_name')}</label>
-                        <div className="autocomplete-container">
-                            <input
-                                ref={inputRef}
-                                id="brandName"
-                                type="text"
-                                placeholder={t('brand_name_placeholder')}
-                                value={formData.name}
-                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
-                                autoFocus
-                                autoComplete="off"
+                        <div className="form-group">
+                            <label htmlFor="notes">{t('notes')} ({t('optional')})</label>
+                            <textarea
+                                id="notes"
+                                placeholder={t('brand_notes_placeholder')}
+                                value={formData.notes}
+                                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                                rows={2}
                             />
-                            {showSuggestions && (
-                                <div className="suggestions-dropdown">
-                                    {suggestions.map((name, i) => (
-                                        <button
-                                            key={i}
-                                            type="button"
-                                            className="suggestion-item"
-                                            onClick={() => selectSuggestion(name)}
-                                        >
-                                            {name}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
                         </div>
-                    </div>
 
-                    <div className="form-group">
-                        <label htmlFor="notes">{t('notes')} ({t('optional')})</label>
-                        <textarea
-                            id="notes"
-                            placeholder={t('brand_notes_placeholder')}
-                            value={formData.notes}
-                            onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                            rows={2}
-                        />
-                    </div>
-
-                    <div className="modal-actions">
-                        <button type="button" className="btn btn-secondary" onClick={closeModal}>
-                            {t('cancel')}
-                        </button>
-                        <button type="submit" className="btn btn-primary">
-                            {t('create')}
-                        </button>
-                    </div>
-                </form>
-            </Modal>
+                        <div className="modal-actions">
+                            <button type="button" className="btn btn-secondary" onClick={closeModal}>
+                                {t('cancel')}
+                            </button>
+                            <button type="submit" className="btn btn-primary">
+                                {t('create')}
+                            </button>
+                        </div>
+                    </form>
+                </Modal>
+            </div>
         </Layout>
     );
 }

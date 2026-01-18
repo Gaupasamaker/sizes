@@ -44,6 +44,23 @@
     flex-direction: column;
     gap: var(--spacing-md);
     padding: var(--spacing-md);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition-fast);
+}
+
+/* Dynamic border and background based on profile color */
+.profile-card[class*="profile-border-"] {
+    border-left-width: 5px;
+    border-left-color: var(--profile-color);
+}
+
+.profile-card[class*="profile-border-"]:hover {
+    background: linear-gradient(to right,
+            color-mix(in srgb, var(--profile-color) 10%, transparent),
+            transparent);
+    transform: translateX(4px);
 }
 
 .profile-header {
