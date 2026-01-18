@@ -25,7 +25,7 @@ export default function Layout({ children, title, showBack = false }) {
                     </button>
                 )}
                 {(title === 'Sizes' || title === t('app_name')) ? (
-                    <img src="/logo-sizes.png" alt="Sizes" className="header-logo" />
+                    <img src="/logo-sizes-transparent.png" alt="Sizes" className="header-logo" />
                 ) : (
                     <h1 className="header-title">{title}</h1>
                 )}

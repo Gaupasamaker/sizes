@@ -29,15 +29,19 @@
 }
 
 .header-logo {
-    height: 48px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 60px;
     width: auto;
-    margin-right: auto;
     object-fit: contain;
-    display: block;
+    /* Ensure pointer events work if needed, though img usually doesn't capture clicks unless wrapped */
+    pointer-events: none;
 }
 
 /* Language selector in header */
 .language-selector {
+    margin-left: auto;
     display: flex;
     align-items: center;
     gap: var(--spacing-xs);
