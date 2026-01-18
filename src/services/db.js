@@ -49,12 +49,16 @@ export async function getProfile(id) {
 
 export async function createProfile(data) {
     const db = await initDB();
+    // Ensure name, avatar, and color are handled, and add new fields
     const profile = {
         id: generateId(),
         name: data.name,
         avatar: data.avatar || data.name.charAt(0).toUpperCase(),
         color: data.color || 'blue',
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(), // Added updatedAt
+        isChild: data.isChild || false, // Initialize isChild
+        lastCheck: new Date().toISOString() // Initialize lastCheck
     };
     await db.add('profiles', profile);
     return profile;

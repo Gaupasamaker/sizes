@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Plus, User, Trash2, Edit2, Ruler, Share2, CheckCircle } from 'lucide-react';
+import { Plus, User, Trash2, Edit2, Ruler, Share2, CheckCircle, Baby, Clock } from 'lucide-react';
 import Layout from '../components/Layout';
 import Modal from '../components/Modal';
 import { getProfiles, createProfile, updateProfile, deleteProfile, PROFILE_COLORS } from '../services/db';
@@ -13,7 +13,7 @@ export default function Profiles() {
     const [loading, setLoading] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
     const [editingProfile, setEditingProfile] = useState(null);
-    const [formData, setFormData] = useState({ name: '', color: 'blue' });
+    const [formData, setFormData] = useState({ name: '', color: 'blue', isChild: false });
     const [shareMessage, setShareMessage] = useState(null);
     const navigate = useNavigate();
     const { language, setLanguage, t } = useLanguage();
@@ -36,10 +36,10 @@ export default function Profiles() {
     function openModal(profile = null) {
         if (profile) {
             setEditingProfile(profile);
-            setFormData({ name: profile.name, color: profile.color });
+            setFormData({ name: profile.name, color: profile.color, isChild: profile.isChild || false });
         } else {
             setEditingProfile(null);
-            setFormData({ name: '', color: 'blue' });
+            setFormData({ name: '', color: 'blue', isChild: false });
         }
         setModalOpen(true);
     }
@@ -47,7 +47,34 @@ export default function Profiles() {
     function closeModal() {
         setModalOpen(false);
         setEditingProfile(null);
-        setFormData({ name: '', color: 'blue' });
+        setFormData({ name: '', color: 'blue', isChild: false });
+    }
+
+    function toggleLanguage() {
+        setLanguage(language === 'es' ? 'en' : 'es');
+    }
+
+    // Check if profile needs size review (3 months)
+    function checkGrowthReminder(profile) {
+        if (!profile.isChild || !profile.lastCheck) return false;
+
+        const lastCheck = new Date(profile.lastCheck);
+        const threeMonthsAgo = new Date();
+        threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+
+        return lastCheck < threeMonthsAgo;
+    }
+
+    async function handleCheckSizes(profile, e) {
+        e.stopPropagation();
+        try {
+            await updateProfile(profile.id, { lastCheck: new Date().toISOString() });
+            loadProfiles();
+            setShareMessage(t('sizes_checked'));
+            setTimeout(() => setShareMessage(null), 3000);
+        } catch (error) {
+            console.error('Error updating check date:', error);
+        }
     }
 
     async function handleSubmit(e) {
@@ -126,6 +153,7 @@ export default function Profiles() {
                 </div>
             </Link>
 
+            {/* Profiles Grid */}
             {profiles.length === 0 ? (
                 <div className="empty-state animate-fadeIn">
                     <User size={64} />
@@ -134,43 +162,60 @@ export default function Profiles() {
                 </div>
             ) : (
                 <div className="profiles-grid animate-slideUp">
-                    {profiles.map((profile) => (
-                        <div
-                            key={profile.id}
-                            className={`profile-card card card-interactive profile-color-${profile.color}`}
-                            onClick={() => navigate(`/profile/${profile.id}`)}
-                        >
-                            <div className="profile-avatar" style={{ background: `var(--profile-color)` }}>
-                                {profile.avatar}
+                    {profiles.map((profile) => {
+                        const needsCheck = checkGrowthReminder(profile);
+
+                        return (
+                            <div
+                                key={profile.id}
+                                className={`profile-card card card-interactive profile-border-${profile.color}`}
+                                onClick={() => navigate(`/profile/${profile.id}`)}
+                            >
+                                <div className="profile-header">
+                                    <div className={`profile-avatar profile-color-${profile.color}`}>
+                                        {profile.isChild ? <Baby size={24} /> : <User size={24} />}
+                                    </div>
+                                    <div className="profile-info">
+                                        <h3>{profile.name}</h3>
+                                        {needsCheck && (
+                                            <div className="growth-warning" onClick={(e) => handleCheckSizes(profile, e)}>
+                                                <Clock size={14} />
+                                                <span>{t('check_sizes')}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {needsCheck && (
+                                    <p className="growth-message">{t('check_sizes_hint')}</p>
+                                )}
+
+                                <div className="profile-actions">
+                                    <button
+                                        className="btn btn-ghost btn-icon"
+                                        onClick={(e) => handleShare(profile, e)}
+                                        title={t('share')}
+                                    >
+                                        <Share2 size={18} />
+                                    </button>
+                                    <button
+                                        className="btn btn-ghost btn-icon"
+                                        onClick={(e) => handleEdit(profile, e)}
+                                        title={t('edit')}
+                                    >
+                                        <Edit2 size={18} />
+                                    </button>
+                                    <button
+                                        className="btn btn-ghost btn-icon"
+                                        onClick={(e) => handleDelete(profile.id, e)}
+                                        title={t('delete')}
+                                    >
+                                        <Trash2 size={18} />
+                                    </button>
+                                </div>
                             </div>
-                            <div className="profile-info">
-                                <h3 className="profile-name">{profile.name}</h3>
-                            </div>
-                            <div className="profile-actions">
-                                <button
-                                    className="btn btn-ghost btn-icon"
-                                    onClick={(e) => handleShare(profile, e)}
-                                    title={t('share')}
-                                >
-                                    <Share2 size={18} />
-                                </button>
-                                <button
-                                    className="btn btn-ghost btn-icon"
-                                    onClick={(e) => handleEdit(profile, e)}
-                                    title={t('edit')}
-                                >
-                                    <Edit2 size={18} />
-                                </button>
-                                <button
-                                    className="btn btn-ghost btn-icon"
-                                    onClick={(e) => handleDelete(profile.id, e)}
-                                    title={t('delete')}
-                                >
-                                    <Trash2 size={18} />
-                                </button>
-                            </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
 
@@ -218,6 +263,20 @@ export default function Profiles() {
                                 </button>
                             ))}
                         </div>
+                    </div>
+
+                    <div className="form-group checkbox-group">
+                        <label className="checkbox-label">
+                            <input
+                                type="checkbox"
+                                checked={formData.isChild}
+                                onChange={(e) => setFormData({ ...formData, isChild: e.target.checked })}
+                            />
+                            <div className="checkbox-text">
+                                <span>{t('is_child')}</span>
+                                <small>{t('is_child_hint')}</small>
+                            </div>
+                        </label>
                     </div>
 
                     <div className="modal-actions">

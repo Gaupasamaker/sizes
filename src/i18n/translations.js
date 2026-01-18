@@ -26,6 +26,11 @@ export const translations = {
         color: 'Color',
         delete_profile_confirm: '¿Eliminar este perfil y todas sus tallas?',
         link_copied: 'Link copiado para',
+        is_child: 'Es un perfil infantil',
+        is_child_hint: 'Te recordaremos revisar las tallas cada 3 meses',
+        check_sizes: 'Revisar tallas',
+        check_sizes_hint: 'Han pasado 3 meses. ¿Siguen valiendo estas tallas?',
+        sizes_checked: '¡Tallas confirmadas!',
 
         // Brands
         brands: 'Marcas',
@@ -138,6 +143,11 @@ export const translations = {
         color: 'Color',
         delete_profile_confirm: 'Delete this profile and all its sizes?',
         link_copied: 'Link copied for',
+        is_child: 'Is a child profile',
+        is_child_hint: 'We\'ll remind you to check sizes every 3 months',
+        check_sizes: 'Check sizes',
+        check_sizes_hint: 'It\'s been 3 months. Do these sizes still fit?',
+        sizes_checked: 'Sizes confirmed!',
 
         // Brands
         brands: 'Brands',
