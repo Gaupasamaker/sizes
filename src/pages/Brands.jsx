@@ -5,6 +5,7 @@ import Layout from '../components/Layout';
 import Modal from '../components/Modal';
 import { getProfile, getBrandsByProfile, createBrand, searchBrands, getSizesByBrand, CATEGORIES } from '../services/db';
 import { searchBrandSuggestions } from '../services/brands';
+import { useLanguage } from '../hooks/useLanguage';
 import './Brands.css';
 
 export default function Brands() {
@@ -20,6 +21,7 @@ export default function Brands() {
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const inputRef = useRef(null);
+    const { t } = useLanguage();
 
     useEffect(() => {
         loadData();
@@ -127,22 +129,22 @@ export default function Brands() {
 
     if (loading) {
         return (
-            <Layout title="Cargando..." showBack>
+            <Layout title={t('loading')} showBack>
                 <div className="empty-state">
-                    <p>Cargando...</p>
+                    <p>{t('loading')}</p>
                 </div>
             </Layout>
         );
     }
 
     return (
-        <Layout title={profile?.name || 'Marcas'} showBack>
+        <Layout title={profile?.name || t('brands')} showBack>
             {/* Search bar */}
             <div className="search-bar">
                 <Search size={20} className="search-icon" />
                 <input
                     type="text"
-                    placeholder="Buscar marca..."
+                    placeholder={t('search_brand')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -156,8 +158,8 @@ export default function Brands() {
             {brands.length === 0 ? (
                 <div className="empty-state animate-fadeIn">
                     <Tag size={64} />
-                    <h3>{searchQuery ? 'Sin resultados' : 'Sin marcas'}</h3>
-                    <p>{searchQuery ? 'Prueba con otra búsqueda' : 'Añade una marca para guardar tus tallas'}</p>
+                    <h3>{searchQuery ? t('no_results') : t('no_brands')}</h3>
+                    <p>{searchQuery ? t('try_another_search') : t('add_brand_hint')}</p>
                 </div>
             ) : (
                 <div className="brands-list animate-slideUp">
@@ -170,7 +172,7 @@ export default function Brands() {
                             <div className="brand-info">
                                 <h3 className="brand-name">{brand.name}</h3>
                                 <div className="brand-sizes">
-                                    {getSizeSummary(brand.id) || <span className="text-muted">Sin tallas</span>}
+                                    {getSizeSummary(brand.id) || <span className="text-muted">{t('no_sizes')}</span>}
                                 </div>
                             </div>
                             <ChevronRight size={20} className="text-muted" />
@@ -183,16 +185,16 @@ export default function Brands() {
                 <Plus size={24} />
             </button>
 
-            <Modal isOpen={modalOpen} onClose={closeModal} title="Nueva marca">
+            <Modal isOpen={modalOpen} onClose={closeModal} title={t('new_brand')}>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label htmlFor="brandName">Nombre de la marca</label>
+                        <label htmlFor="brandName">{t('brand_name')}</label>
                         <div className="autocomplete-container">
                             <input
                                 ref={inputRef}
                                 id="brandName"
                                 type="text"
-                                placeholder="Ej: Nike, Zara, H&M..."
+                                placeholder={t('brand_name_placeholder')}
                                 value={formData.name}
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
@@ -217,10 +219,10 @@ export default function Brands() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="notes">Notas (opcional)</label>
+                        <label htmlFor="notes">{t('notes')} ({t('optional')})</label>
                         <textarea
                             id="notes"
-                            placeholder="Ej: Sus tallas suelen ser pequeñas..."
+                            placeholder={t('brand_notes_placeholder')}
                             value={formData.notes}
                             onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                             rows={2}
@@ -229,10 +231,10 @@ export default function Brands() {
 
                     <div className="modal-actions">
                         <button type="button" className="btn btn-secondary" onClick={closeModal}>
-                            Cancelar
+                            {t('cancel')}
                         </button>
                         <button type="submit" className="btn btn-primary">
-                            Crear
+                            {t('create')}
                         </button>
                     </div>
                 </form>

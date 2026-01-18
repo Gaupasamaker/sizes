@@ -3,12 +3,14 @@ import { useParams, Link } from 'react-router-dom';
 import { User, ChevronRight, AlertCircle, Home } from 'lucide-react';
 import { decodeShareData } from '../services/share';
 import { CATEGORIES, FIT_OPTIONS } from '../services/db';
+import { useLanguage } from '../hooks/useLanguage';
 import './SharedProfile.css';
 
 export default function SharedProfile() {
     const { data } = useParams();
     const [profile, setProfile] = useState(null);
     const [error, setError] = useState(false);
+    const { t } = useLanguage();
 
     useEffect(() => {
         if (data) {
@@ -40,11 +42,11 @@ export default function SharedProfile() {
         return (
             <div className="shared-profile-error">
                 <AlertCircle size={64} />
-                <h2>Link inválido</h2>
-                <p>Este enlace de tallas no es válido o ha caducado.</p>
+                <h2>{t('invalid_link')}</h2>
+                <p>{t('invalid_link_desc')}</p>
                 <Link to="/" className="btn btn-primary">
                     <Home size={18} />
-                    Ir a Sizes
+                    {t('go_to_sizes')}
                 </Link>
             </div>
         );
@@ -53,7 +55,7 @@ export default function SharedProfile() {
     if (!profile) {
         return (
             <div className="shared-profile-loading">
-                <p>Cargando...</p>
+                <p>{t('loading')}</p>
             </div>
         );
     }
@@ -65,15 +67,15 @@ export default function SharedProfile() {
                     <User size={24} />
                 </div>
                 <div>
-                    <h1>Tallas de {profile.n}</h1>
-                    <p className="shared-subtitle">Compartido desde Sizes</p>
+                    <h1>{t('share_title')} {profile.n}</h1>
+                    <p className="shared-subtitle">{t('shared_from')}</p>
                 </div>
             </header>
 
             <div className="shared-brands">
                 {profile.b.length === 0 ? (
                     <div className="shared-empty">
-                        <p>Este perfil no tiene tallas guardadas.</p>
+                        <p>{t('no_sizes_saved')}</p>
                     </div>
                 ) : (
                     profile.b.map((brand, brandIdx) => (
@@ -82,7 +84,7 @@ export default function SharedProfile() {
                             {brand.notes && <p className="shared-brand-notes">{brand.notes}</p>}
 
                             {brand.sizes.length === 0 ? (
-                                <p className="text-muted">Sin tallas</p>
+                                <p className="text-muted">{t('no_sizes')}</p>
                             ) : (
                                 <div className="shared-sizes">
                                     {brand.sizes.map((size, sizeIdx) => (
@@ -102,9 +104,9 @@ export default function SharedProfile() {
             </div>
 
             <div className="shared-footer">
-                <p>¿Quieres guardar tus propias tallas?</p>
+                <p>{t('want_save_sizes')}</p>
                 <Link to="/" className="btn btn-primary">
-                    Probar Sizes gratis
+                    {t('try_sizes')}
                 </Link>
             </div>
         </div>

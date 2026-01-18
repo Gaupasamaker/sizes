@@ -4,6 +4,7 @@ import { Plus, Trash2, Edit2, AlertCircle, Camera, Image, X } from 'lucide-react
 import Layout from '../components/Layout';
 import Modal from '../components/Modal';
 import { getBrand, updateBrand, deleteBrand, getSizesByBrand, createSize, updateSize, deleteSize, CATEGORIES, FIT_OPTIONS } from '../services/db';
+import { useLanguage } from '../hooks/useLanguage';
 import './BrandDetail.css';
 
 export default function BrandDetail() {
@@ -20,6 +21,7 @@ export default function BrandDetail() {
     const [sizeForm, setSizeForm] = useState({ category: 'tops', size: '', fit: 'normal', notes: '', photo: null });
     const [brandForm, setBrandForm] = useState({ name: '', notes: '' });
     const fileInputRef = useRef(null);
+    const { language, t } = useLanguage();
 
     useEffect(() => {
         loadData();
@@ -204,9 +206,9 @@ export default function BrandDetail() {
 
     if (loading) {
         return (
-            <Layout title="Cargando..." showBack>
+            <Layout title={t('loading')} showBack>
                 <div className="empty-state">
-                    <p>Cargando...</p>
+                    <p>{t('loading')}</p>
                 </div>
             </Layout>
         );
@@ -215,7 +217,7 @@ export default function BrandDetail() {
     const sizesByCategory = getSizesByCategory();
 
     return (
-        <Layout title={brand?.name || 'Marca'} showBack>
+        <Layout title={brand?.name || t('brands')} showBack>
             {/* Brand header */}
             <div className="brand-header card animate-fadeIn">
                 <div className="brand-header-info">
@@ -223,10 +225,10 @@ export default function BrandDetail() {
                     {brand.notes && <p className="brand-notes">{brand.notes}</p>}
                 </div>
                 <div className="brand-header-actions">
-                    <button className="btn btn-ghost btn-icon" onClick={openBrandModal} title="Editar">
+                    <button className="btn btn-ghost btn-icon" onClick={openBrandModal} title={t('edit')}>
                         <Edit2 size={18} />
                     </button>
-                    <button className="btn btn-ghost btn-icon" onClick={handleDeleteBrand} title="Eliminar">
+                    <button className="btn btn-ghost btn-icon" onClick={handleDeleteBrand} title={t('delete')}>
                         <Trash2 size={18} />
                     </button>
                 </div>
@@ -246,7 +248,7 @@ export default function BrandDetail() {
 
                             {categorySizes.length === 0 ? (
                                 <p className="text-muted" style={{ fontSize: '0.875rem', marginTop: '8px' }}>
-                                    Sin tallas
+                                    {t('no_sizes')}
                                 </p>
                             ) : (
                                 <div className="sizes-grid">
@@ -272,14 +274,14 @@ export default function BrandDetail() {
                                                 <button
                                                     className="btn btn-ghost btn-icon"
                                                     onClick={() => openSizeModal(size)}
-                                                    title="Editar"
+                                                    title={t('edit')}
                                                 >
                                                     <Edit2 size={16} />
                                                 </button>
                                                 <button
                                                     className="btn btn-ghost btn-icon"
                                                     onClick={() => handleDeleteSize(size.id)}
-                                                    title="Eliminar"
+                                                    title={t('delete')}
                                                 >
                                                     <Trash2 size={16} />
                                                 </button>
@@ -296,7 +298,7 @@ export default function BrandDetail() {
             {sizes.length === 0 && (
                 <div className="empty-hint">
                     <AlertCircle size={20} />
-                    <span>Pulsa + para añadir tu primera talla</span>
+                    <span>{t('first_size_hint')}</span>
                 </div>
             )}
 
@@ -318,11 +320,11 @@ export default function BrandDetail() {
             <Modal
                 isOpen={sizeModalOpen}
                 onClose={closeSizeModal}
-                title={editingSize ? 'Editar talla' : 'Nueva talla'}
+                title={editingSize ? t('edit_size') : t('new_size')}
             >
                 <form onSubmit={handleSizeSubmit}>
                     <div className="form-group">
-                        <label>Categoría</label>
+                        <label>{t('category')}</label>
                         <div className="category-picker">
                             {CATEGORIES.map((cat) => (
                                 <button
@@ -339,11 +341,11 @@ export default function BrandDetail() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="sizeValue">Talla</label>
+                        <label htmlFor="sizeValue">{t('size')}</label>
                         <input
                             id="sizeValue"
                             type="text"
-                            placeholder="Ej: M, 42, 12 UK..."
+                            placeholder={t('size_placeholder')}
                             value={sizeForm.size}
                             onChange={(e) => setSizeForm({ ...sizeForm, size: e.target.value })}
                             autoFocus
@@ -351,7 +353,7 @@ export default function BrandDetail() {
                     </div>
 
                     <div className="form-group">
-                        <label>¿Cómo sienta?</label>
+                        <label>{t('how_fits')}</label>
                         <div className="fit-picker">
                             {FIT_OPTIONS.map((fit) => (
                                 <button
@@ -369,7 +371,7 @@ export default function BrandDetail() {
 
                     {/* Photo section */}
                     <div className="form-group">
-                        <label>Foto de etiqueta (opcional)</label>
+                        <label>{t('photo_label')} ({t('optional')})</label>
                         {sizeForm.photo ? (
                             <div className="photo-preview">
                                 <img src={sizeForm.photo} alt="Etiqueta" />
@@ -388,17 +390,17 @@ export default function BrandDetail() {
                                 onClick={handlePhotoCapture}
                             >
                                 <Camera size={20} />
-                                <span>Hacer foto a la etiqueta</span>
+                                <span>{t('take_photo')}</span>
                             </button>
                         )}
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="sizeNotes">Notas (opcional)</label>
+                        <label htmlFor="sizeNotes">{t('notes')} ({t('optional')})</label>
                         <input
                             id="sizeNotes"
                             type="text"
-                            placeholder="Ej: Tomar una talla más..."
+                            placeholder={t('size_notes_placeholder')}
                             value={sizeForm.notes}
                             onChange={(e) => setSizeForm({ ...sizeForm, notes: e.target.value })}
                         />
@@ -406,17 +408,17 @@ export default function BrandDetail() {
 
                     <div className="modal-actions">
                         <button type="button" className="btn btn-secondary" onClick={closeSizeModal}>
-                            Cancelar
+                            {t('cancel')}
                         </button>
                         <button type="submit" className="btn btn-primary">
-                            {editingSize ? 'Guardar' : 'Añadir'}
+                            {editingSize ? t('save') : t('add')}
                         </button>
                     </div>
                 </form>
             </Modal>
 
             {/* Photo View Modal */}
-            <Modal isOpen={photoModalOpen} onClose={closePhotoModal} title="Foto de etiqueta">
+            <Modal isOpen={photoModalOpen} onClose={closePhotoModal} title={t('photo_label_title')}>
                 {selectedPhoto && (
                     <div className="photo-full">
                         <img src={selectedPhoto} alt="Etiqueta" />
@@ -425,10 +427,10 @@ export default function BrandDetail() {
             </Modal>
 
             {/* Brand Edit Modal */}
-            <Modal isOpen={brandModalOpen} onClose={closeBrandModal} title="Editar marca">
+            <Modal isOpen={brandModalOpen} onClose={closeBrandModal} title={t('edit_brand')}>
                 <form onSubmit={handleBrandSubmit}>
                     <div className="form-group">
-                        <label htmlFor="editBrandName">Nombre</label>
+                        <label htmlFor="editBrandName">{t('profile_name')}</label>
                         <input
                             id="editBrandName"
                             type="text"
@@ -438,7 +440,7 @@ export default function BrandDetail() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="editBrandNotes">Notas</label>
+                        <label htmlFor="editBrandNotes">{t('notes')}</label>
                         <textarea
                             id="editBrandNotes"
                             value={brandForm.notes}
@@ -449,10 +451,10 @@ export default function BrandDetail() {
 
                     <div className="modal-actions">
                         <button type="button" className="btn btn-secondary" onClick={closeBrandModal}>
-                            Cancelar
+                            {t('cancel')}
                         </button>
                         <button type="submit" className="btn btn-primary">
-                            Guardar
+                            {t('save')}
                         </button>
                     </div>
                 </form>
