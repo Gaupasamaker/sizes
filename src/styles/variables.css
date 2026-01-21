@@ -81,17 +81,20 @@
     --surface-light: #232E48;
 
     --text: #F9F9F7;
-    /* Cream text on dark */
+    /* Cream text on dark background */
     --text-muted: #9CA3AF;
     --text-inverse: #0F1525;
+
+    /* Ensure headings are visible */
+    --primary: #C5A065;
+    /* Use Gold for primary actions/text in dark mode to stand out */
 
     --border: #2C3A5C;
 
     --stitch-paper-texture: none;
-    /* No paper texture in dark mode or subtle grain */
     --stitch-gold-light: #C5A065;
-    /* Darker gold for better contrast on dark */
-    --stitch-grey: #2C3A5C;
+    --stitch-grey: #4B5563;
+    /* Lighter grey for visibility */
   }
 }
 
@@ -104,12 +107,14 @@
   --text: #F9F9F7;
   --text-muted: #9CA3AF;
   --text-inverse: #0F1525;
+  --primary: #C5A065;
+  /* Fix dark mode primary color visibility */
 
   --border: #2C3A5C;
 
   --stitch-paper-texture: none;
   --stitch-gold-light: #C5A065;
-  --stitch-grey: #2C3A5C;
+  --stitch-grey: #4B5563;
 }
 
 body {

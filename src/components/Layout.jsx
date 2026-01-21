@@ -25,7 +25,7 @@ export default function Layout({ children, title, showBack = false }) {
                     </button>
                 )}
                 {(!title || title === 'Sizes' || title === t('app_name')) ? (
-                    <img src="/logo-sizes-transparent.png" alt="Sizes" className="header-logo animate-fadeIn" />
+                    <img src={`/logo-sizes-transparent.png?v=${new Date().getTime()}`} alt="Sizes" className="header-logo animate-fadeIn" />
                 ) : (
                     <h1 className="header-title">{title}</h1>
                 )}
