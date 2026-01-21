@@ -12,8 +12,8 @@ export default defineConfig({
         name: 'Sizes',
         short_name: 'Sizes',
         description: 'Guarda tus tallas de ropa por marca',
-        theme_color: '#6366f1',
-        background_color: '#0f172a',
+        theme_color: '#F9F9F7', /* Stitch Cream */
+        background_color: '#F9F9F7', /* Stitch Cream */
         display: 'standalone',
         start_url: '/',
         icons: [
