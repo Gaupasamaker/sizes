@@ -75,13 +75,24 @@
     background: rgba(99, 102, 241, 0.1);
     border: 1px solid rgba(99, 102, 241, 0.3);
     border-radius: var(--radius-md);
-    color: var(--primary-light);
+    color: var(--text);
     font-size: 0.875rem;
 }
 
 .size-guide-info svg {
     flex-shrink: 0;
     margin-top: 2px;
+    color: var(--stitch-gold);
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .size-guide-info,
+@media (prefers-color-scheme: dark) {
+    .size-guide-info {
+        background: rgba(197, 160, 101, 0.15);
+        border-color: rgba(197, 160, 101, 0.4);
+        color: var(--text);
+    }
 }
 
 /* Tabs */
