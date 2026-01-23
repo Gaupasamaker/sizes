@@ -196,29 +196,29 @@ export default function Profiles() {
                                             </div>
                                         )}
                                     </div>
-                                    <div className="profile-actions">
-                                        <button
-                                            className="btn btn-ghost btn-icon"
-                                            onClick={(e) => handleShare(profile, e)}
-                                            title={t('share')}
-                                        >
-                                            <Share2 size={18} />
-                                        </button>
-                                        <button
-                                            className="btn btn-ghost btn-icon"
-                                            onClick={(e) => handleEdit(profile, e)}
-                                            title={t('edit')}
-                                        >
-                                            <Edit2 size={18} />
-                                        </button>
-                                        <button
-                                            className="btn btn-ghost btn-icon"
-                                            onClick={(e) => handleDelete(profile.id, e)}
-                                            title={t('delete')}
-                                        >
-                                            <Trash2 size={18} />
-                                        </button>
-                                    </div>
+                                </div>
+                                <div className="profile-actions">
+                                    <button
+                                        className="btn btn-ghost btn-icon"
+                                        onClick={(e) => handleShare(profile, e)}
+                                        title={t('share')}
+                                    >
+                                        <Share2 size={18} />
+                                    </button>
+                                    <button
+                                        className="btn btn-ghost btn-icon"
+                                        onClick={(e) => handleEdit(profile, e)}
+                                        title={t('edit')}
+                                    >
+                                        <Edit2 size={18} />
+                                    </button>
+                                    <button
+                                        className="btn btn-ghost btn-icon"
+                                        onClick={(e) => handleDelete(profile.id, e)}
+                                        title={t('delete')}
+                                    >
+                                        <Trash2 size={18} />
+                                    </button>
                                 </div>
 
                                 {needsCheck && (
