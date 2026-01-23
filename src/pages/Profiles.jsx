@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Plus, User, CircleUser, Trash2, Edit2, Ruler, Share2, CheckCircle, Baby, Clock } from 'lucide-react';
+import { Plus, User, UserRound, Trash2, Edit2, Ruler, Share2, CheckCircle, Baby, Clock } from 'lucide-react';
 import ReloadPrompt from '../components/ReloadPrompt';
 import Layout from '../components/Layout';
 import Modal from '../components/Modal';
@@ -178,7 +178,7 @@ export default function Profiles() {
                             >
                                 <div className="profile-header">
                                     <div className={`profile-avatar profile-color-${profile.color}`}>
-                                        {profile.type === 'woman' ? <CircleUser size={24} /> :
+                                        {profile.type === 'woman' ? <UserRound size={24} /> :
                                             (profile.type === 'child' || profile.isChild) ? <Baby size={24} /> :
                                                 <User size={24} />}
                                     </div>
@@ -292,7 +292,7 @@ export default function Profiles() {
                                 className={`type-option ${formData.type === 'woman' ? 'selected' : ''}`}
                                 onClick={() => setFormData({ ...formData, type: 'woman' })}
                             >
-                                <CircleUser size={20} />
+                                <UserRound size={20} />
                                 <span>{t('type_woman')}</span>
                             </button>
                             <button
