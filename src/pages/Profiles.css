@@ -58,7 +58,7 @@
     /* External shadow */
     border-radius: var(--radius-sm);
     position: relative;
-    overflow: hidden;
+    /* Removed overflow: hidden to allow dropdown to show */
     transition: all var(--transition-fast);
 }
 
