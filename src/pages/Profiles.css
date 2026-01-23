@@ -127,9 +127,7 @@
     flex-direction: column;
     gap: 2px;
     align-items: flex-start;
-    /* Align text to left */
-    padding-left: var(--spacing-sm);
-    /* Space for the accent tag */
+    padding-left: 0;
 }
 
 .profile-info h3 {
@@ -193,7 +191,28 @@
 
 .profile-actions .btn:hover {
     color: var(--text);
-    background: var(--surface-hover);
+    background: rgba(197, 160, 101, 0.1);
+}
+
+/* Dark mode icon visibility fix */
+[data-theme="dark"] .profile-actions .btn {
+    color: var(--stitch-gold-light);
+}
+
+[data-theme="dark"] .profile-actions .btn:hover {
+    color: var(--stitch-gold);
+    background: rgba(197, 160, 101, 0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+    .profile-actions .btn {
+        color: var(--stitch-gold-light);
+    }
+
+    .profile-actions .btn:hover {
+        color: var(--stitch-gold);
+        background: rgba(197, 160, 101, 0.2);
+    }
 }
 
 /* Color picker */
