@@ -6,6 +6,26 @@ import { CATEGORIES, FIT_OPTIONS } from '../services/db';
 import { useLanguage } from '../hooks/useLanguage';
 import './SharedProfile.css';
 
+// Custom Woman icon with long hair
+const WomanIcon = ({ size = 24, ...props }) => (
+    <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+    >
+        <path d="M12 7a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" />
+        <path d="M8 21v-2a4 4 0 0 1 4-4h0a4 4 0 0 1 4 4v2" />
+        <path d="M7 10c0-3 1.5-5 5-5s5 2 5 5v3" />
+        <path d="M17 12c.5 0 1 1.5 1 3s-.5 4-1 4a12 12 0 0 1-10 0c-.5 0-1-2.5-1-4s.5-3 1-3" />
+    </svg>
+);
+
 export default function SharedProfile() {
     const { data } = useParams();
     const [profile, setProfile] = useState(null);
@@ -64,7 +84,9 @@ export default function SharedProfile() {
         <div className="shared-profile">
             <header className="shared-header">
                 <div className={`shared-avatar profile-color-${profile.c}`}>
-                    <User size={24} />
+                    {profile.t === 'woman' ? <WomanIcon size={24} /> :
+                        (profile.t === 'child' || profile.isChild) ? <Baby size={24} /> :
+                            <User size={24} />}
                 </div>
                 <div>
                     <h1>{t('share_title')} {profile.n}</h1>

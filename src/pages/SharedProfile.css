@@ -16,14 +16,16 @@
 }
 
 .shared-avatar {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: var(--profile-color, var(--primary));
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: var(--profile-color);
     color: white;
+    font-size: 1.25rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .shared-header h1 {
