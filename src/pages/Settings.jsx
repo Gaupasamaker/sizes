@@ -1,3 +1,4 @@
+import { useState, useRef } from 'react';
 import { Download, Upload, Info, CheckCircle, AlertTriangle, Sun, Moon, Trash2 } from 'lucide-react';
 import Layout from '../components/Layout';
 import Modal from '../components/Modal';
