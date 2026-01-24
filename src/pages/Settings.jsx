@@ -1,6 +1,6 @@
-import { useState, useRef } from 'react';
-import { Download, Upload, Info, CheckCircle, AlertTriangle, Sun, Moon } from 'lucide-react';
+import { Download, Upload, Info, CheckCircle, AlertTriangle, Sun, Moon, Trash2 } from 'lucide-react';
 import Layout from '../components/Layout';
+import Modal from '../components/Modal';
 import { exportData, importData } from '../services/db';
 import { useTheme } from '../hooks/useTheme';
 import { useLanguage } from '../hooks/useLanguage';
@@ -9,6 +9,8 @@ import './Settings.css';
 export default function Settings() {
     const [importing, setImporting] = useState(false);
     const [message, setMessage] = useState(null);
+    const [importConfirmOpen, setImportConfirmOpen] = useState(false);
+    const [pendingFile, setPendingFile] = useState(null);
     const fileInputRef = useRef(null);
     const { theme, toggleTheme } = useTheme();
     const { language, t } = useLanguage();
@@ -31,22 +33,31 @@ export default function Settings() {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        if (!confirm(t('import_confirm'))) {
-            e.target.value = '';
-            return;
-        }
+        setPendingFile(file);
+        setImportConfirmOpen(true);
+        e.target.value = '';
+    }
 
+    async function confirmImport() {
+        if (!pendingFile) return;
+
+        setImportConfirmOpen(false);
         setImporting(true);
         try {
-            const result = await importData(file);
+            const result = await importData(pendingFile);
             showMessage('success', `${t('import_success')} ${result.profiles} perfiles, ${result.brands} marcas, ${result.sizes} tallas`);
         } catch (error) {
             console.error('Error importing:', error);
             showMessage('error', t('import_error'));
         } finally {
             setImporting(false);
-            e.target.value = '';
+            setPendingFile(null);
         }
+    }
+
+    function cancelImport() {
+        setImportConfirmOpen(false);
+        setPendingFile(null);
     }
 
     function showMessage(type, text) {
@@ -149,6 +160,25 @@ export default function Settings() {
                     <span>{message.text}</span>
                 </div>
             )}
+
+            {/* Import Confirmation Modal */}
+            <Modal isOpen={importConfirmOpen} onClose={cancelImport}>
+                <div className="confirm-modal-content">
+                    <div className="confirm-modal-icon warning">
+                        <AlertTriangle size={48} />
+                    </div>
+                    <h2>{t('import_data')}</h2>
+                    <p>{t('import_confirm')}</p>
+                    <div className="modal-actions">
+                        <button type="button" className="btn btn-secondary" onClick={cancelImport}>
+                            {t('cancel')}
+                        </button>
+                        <button type="button" className="btn btn-warning" onClick={confirmImport}>
+                            {t('import_data')}
+                        </button>
+                    </div>
+                </div>
+            </Modal>
         </Layout>
     );
 }

@@ -20,6 +20,7 @@ export default function BrandDetail() {
     const [editingSize, setEditingSize] = useState(null);
     const [sizeForm, setSizeForm] = useState({ category: 'tops', size: '', fit: 'normal', notes: '', photo: null });
     const [brandForm, setBrandForm] = useState({ name: '', notes: '' });
+    const [deleteConfirm, setDeleteConfirm] = useState({ type: null, id: null });
     const fileInputRef = useRef(null);
     const { language, t } = useLanguage();
 
@@ -141,15 +142,30 @@ export default function BrandDetail() {
         }
     }
 
-    async function handleDeleteSize(id) {
-        if (confirm('¿Eliminar esta talla?')) {
-            try {
-                await deleteSize(id);
+    function handleDeleteSize(id) {
+        setDeleteConfirm({ type: 'size', id });
+    }
+
+    async function confirmDelete() {
+        if (!deleteConfirm.type) return;
+
+        try {
+            if (deleteConfirm.type === 'size') {
+                await deleteSize(deleteConfirm.id);
                 await loadData();
-            } catch (error) {
-                console.error('Error deleting size:', error);
+            } else if (deleteConfirm.type === 'brand') {
+                await deleteBrand(brandId);
+                navigate(-1);
             }
+        } catch (error) {
+            console.error(`Error deleting ${deleteConfirm.type}:`, error);
+        } finally {
+            setDeleteConfirm({ type: null, id: null });
         }
+    }
+
+    function cancelDelete() {
+        setDeleteConfirm({ type: null, id: null });
     }
 
     // Brand modal handlers
@@ -174,15 +190,8 @@ export default function BrandDetail() {
         }
     }
 
-    async function handleDeleteBrand() {
-        if (confirm('¿Eliminar esta marca y todas sus tallas?')) {
-            try {
-                await deleteBrand(brandId);
-                navigate(-1);
-            } catch (error) {
-                console.error('Error deleting brand:', error);
-            }
-        }
+    function handleDeleteBrand() {
+        setDeleteConfirm({ type: 'brand', id: brandId });
     }
 
     // Group sizes by category
@@ -458,6 +467,31 @@ export default function BrandDetail() {
                         </button>
                     </div>
                 </form>
+            </Modal>
+
+            {/* Delete Confirmation Modal */}
+            <Modal isOpen={deleteConfirm.type !== null} onClose={cancelDelete}>
+                <div className="confirm-modal-content">
+                    <div className="confirm-modal-icon danger">
+                        <Trash2 size={48} />
+                    </div>
+                    <h2>
+                        {deleteConfirm.type === 'size' ? t('delete_size') : t('delete_brand')}
+                    </h2>
+                    <p>
+                        {deleteConfirm.type === 'size'
+                            ? t('delete_size_confirm')
+                            : t('delete_brand_confirm')}
+                    </p>
+                    <div className="modal-actions">
+                        <button type="button" className="btn btn-secondary" onClick={cancelDelete}>
+                            {t('cancel')}
+                        </button>
+                        <button type="button" className="btn btn-danger" onClick={confirmDelete}>
+                            {t('delete')}
+                        </button>
+                    </div>
+                </div>
             </Modal>
         </Layout>
     );

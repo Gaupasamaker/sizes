@@ -17,6 +17,7 @@ export default function Profiles() {
     const [formData, setFormData] = useState({ name: '', color: 'blue', type: 'man' });
     const [shareMessage, setShareMessage] = useState(null);
     const [openMenuId, setOpenMenuId] = useState(null);
+    const [deleteConfirmId, setDeleteConfirmId] = useState(null);
     const navigate = useNavigate();
     const { language, setLanguage, t } = useLanguage();
 
@@ -99,16 +100,27 @@ export default function Profiles() {
         }
     }
 
-    async function handleDelete(id, e) {
+    function handleDelete(id, e) {
         e.stopPropagation();
-        if (confirm(t('delete_profile_confirm'))) {
+        setOpenMenuId(null);
+        setDeleteConfirmId(id);
+    }
+
+    async function confirmDelete() {
+        if (deleteConfirmId) {
             try {
-                await deleteProfile(id);
+                await deleteProfile(deleteConfirmId);
                 await loadProfiles();
             } catch (error) {
                 console.error('Error deleting profile:', error);
+            } finally {
+                setDeleteConfirmId(null);
             }
         }
+    }
+
+    function cancelDelete() {
+        setDeleteConfirmId(null);
     }
 
     function handleEdit(profile, e) {
@@ -324,6 +336,25 @@ export default function Profiles() {
                         </button>
                     </div>
                 </form>
+            </Modal>
+
+            {/* Delete Confirmation Modal */}
+            <Modal isOpen={deleteConfirmId !== null} onClose={cancelDelete}>
+                <div className="confirm-modal-content">
+                    <div className="confirm-modal-icon danger">
+                        <Trash2 size={48} />
+                    </div>
+                    <h2>{t('delete_profile')}</h2>
+                    <p>{t('delete_profile_confirm')}</p>
+                    <div className="modal-actions">
+                        <button type="button" className="btn btn-secondary" onClick={cancelDelete}>
+                            {t('cancel')}
+                        </button>
+                        <button type="button" className="btn btn-danger" onClick={confirmDelete}>
+                            {t('delete')}
+                        </button>
+                    </div>
+                </div>
             </Modal>
         </Layout>
     );
