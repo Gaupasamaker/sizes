@@ -9,7 +9,7 @@ import { generateShareLink, copyToClipboard, nativeShare } from '../services/sha
 import { useLanguage } from '../hooks/useLanguage';
 import './Profiles.css';
 
-// Custom Woman icon with long hair
+// Custom Woman icon with long hair (Based on user image)
 const WomanIcon = ({ size = 24, ...props }) => (
     <svg
         width={size}
@@ -17,15 +17,38 @@ const WomanIcon = ({ size = 24, ...props }) => (
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
         {...props}
     >
-        <path d="M12 7a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" />
-        <path d="M8 21v-2a4 4 0 0 1 4-4h0a4 4 0 0 1 4 4v2" />
-        <path d="M7 10c0-3 1.5-5 5-5s5 2 5 5v3" />
-        <path d="M17 12c.5 0 1 1.5 1 3s-.5 4-1 4a12 12 0 0 1-10 0c-.5 0-1-2.5-1-4s.5-3 1-3" />
+        <path d="M7 11.5V10c0-3 2-4.5 5-4.5s5 1.5 5 4.5v1.5c0 3.5-1.5 6.5-5 6.5s-5-3-5-6.5z" />
+        <path d="M12 14a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+        <path d="M10 6.5c0-1 1-1.5 2-1.5s2 .5 2 1.5" />
+        <path d="M6 22c0-2.5 2-4.5 6-4.5s6 2 6 4.5" />
+        <path d="M12 17.5l-2.5 2.5h5L12 17.5z" />
+    </svg>
+);
+
+// Custom Man icon with short hair (Based on user image)
+const ManIcon = ({ size = 24, ...props }) => (
+    <svg
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...props}
+    >
+        <path d="M8 8.5c0-2 1.5-3.5 4-3.5s4 1 4 3.5" />
+        <path d="M9 7c0-1 1-1.5 2-1.5" />
+        <path d="M13 5.5l1.5 1.5" />
+        <path d="M12 14a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+        <path d="M6 22c0-2.5 2-4.5 6-4.5s6 2 6 4.5" />
+        <path d="M12 17.5l-2.5 2.5h5L12 17.5z" />
     </svg>
 );
 
@@ -210,10 +233,10 @@ export default function Profiles() {
                                 onClick={() => navigate(`/profile/${profile.id}`)}
                             >
                                 <div className="profile-header">
-                                    <div className={`profile-avatar profile-color-${profile.color}`}>
-                                        {profile.type === 'woman' ? <WomanIcon size={24} /> :
-                                            (profile.type === 'child' || profile.isChild) ? <Baby size={24} /> :
-                                                <User size={24} />}
+                                    <div className="profile-avatar">
+                                        {profile.type === 'woman' ? <WomanIcon size={48} /> :
+                                            (profile.type === 'child' || profile.isChild) ? <Baby size={48} /> :
+                                                <ManIcon size={48} />}
                                     </div>
                                     <div className="profile-info">
                                         <h3>{profile.name}</h3>
@@ -322,7 +345,7 @@ export default function Profiles() {
                                 className={`type-option ${formData.type === 'man' ? 'selected' : ''}`}
                                 onClick={() => setFormData({ ...formData, type: 'man' })}
                             >
-                                <User size={20} />
+                                <ManIcon size={24} />
                                 <span>{t('type_man')}</span>
                             </button>
                             <button
@@ -330,7 +353,7 @@ export default function Profiles() {
                                 className={`type-option ${formData.type === 'woman' ? 'selected' : ''}`}
                                 onClick={() => setFormData({ ...formData, type: 'woman' })}
                             >
-                                <WomanIcon size={20} />
+                                <WomanIcon size={24} />
                                 <span>{t('type_woman')}</span>
                             </button>
                             <button

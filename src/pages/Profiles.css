@@ -120,10 +120,8 @@
     justify-content: center;
     font-size: 1.25rem;
     font-weight: 600;
-    color: white;
+    color: var(--profile-color);
     flex-shrink: 0;
-    background-color: var(--profile-color);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .profile-info {
