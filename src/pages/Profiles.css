@@ -58,7 +58,8 @@
 }
 
 .profile-card.menu-open {
-    z-index: 50;
+    z-index: 999 !important;
+    /* Force high z-index when menu is open */
 }
 
 .profile-card:hover {
