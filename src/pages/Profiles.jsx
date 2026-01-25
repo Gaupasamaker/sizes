@@ -293,7 +293,7 @@ export default function Profiles() {
                                 <div className="profile-header">
                                     <div className="profile-avatar">
                                         {profile.type === 'woman' ? <WomanIcon size={48} /> :
-                                            (profile.type === 'child' || profile.isChild) ? <Baby size={48} /> :
+                                            (profile.type === 'child' || profile.isChild) ? <ChildIcon size={48} /> :
                                                 <ManIcon size={48} />}
                                     </div>
                                     <div className="profile-info">
