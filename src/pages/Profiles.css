@@ -349,6 +349,12 @@
     color: var(--primary);
 }
 
+.form-group-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+}
+
 .type-hint {
     display: block;
     margin-top: var(--spacing-sm);

@@ -3,7 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Plus, Trash2, Edit2, AlertCircle, Camera, Image, X } from 'lucide-react';
 import Layout from '../components/Layout';
 import Modal from '../components/Modal';
-import { getBrand, updateBrand, deleteBrand, getSizesByBrand, createSize, updateSize, deleteSize, CATEGORIES, FIT_OPTIONS } from '../services/db';
+import { getBrand, updateBrand, deleteBrand, getSizesByBrand, createSize, updateSize, deleteSize, getProfile, CATEGORIES, FIT_OPTIONS } from '../services/db';
+import { getRecommendedSize } from '../services/recommender';
 import { useLanguage } from '../hooks/useLanguage';
 import './BrandDetail.css';
 
@@ -11,6 +12,7 @@ export default function BrandDetail() {
     const { brandId } = useParams();
     const navigate = useNavigate();
     const [brand, setBrand] = useState(null);
+    const [profile, setProfile] = useState(null);
     const [sizes, setSizes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [sizeModalOpen, setSizeModalOpen] = useState(false);
@@ -37,6 +39,9 @@ export default function BrandDetail() {
             }
             setBrand(brandData);
             setBrandForm({ name: brandData.name, notes: brandData.notes || '' });
+
+            const profileData = await getProfile(brandData.profileId);
+            setProfile(profileData);
 
             const sizesData = await getSizesByBrand(brandId);
             setSizes(sizesData);
@@ -350,7 +355,15 @@ export default function BrandDetail() {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="sizeValue">{t('size')}</label>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <label htmlFor="sizeValue">{t('size')}</label>
+                            {profile?.height && (
+                                <div className="recommendation-badge" onClick={() => setSizeForm({ ...sizeForm, size: getRecommendedSize(profile, sizeForm.category) })}>
+                                    <Ruler size={12} />
+                                    <span>{t('recommended') || 'Sugerida'}: {getRecommendedSize(profile, sizeForm.category)}</span>
+                                </div>
+                            )}
+                        </div>
                         <input
                             id="sizeValue"
                             type="text"

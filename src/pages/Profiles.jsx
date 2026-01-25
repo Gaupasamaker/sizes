@@ -163,7 +163,7 @@ export default function Profiles() {
     const [loading, setLoading] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
     const [editingProfile, setEditingProfile] = useState(null);
-    const [formData, setFormData] = useState({ name: '', color: 'blue', type: 'man' });
+    const [formData, setFormData] = useState({ name: '', color: 'blue', type: 'man', height: '', weight: '' });
     const [shareMessage, setShareMessage] = useState(null);
     const [openMenuId, setOpenMenuId] = useState(null);
     const [deleteConfirmId, setDeleteConfirmId] = useState(null);
@@ -190,7 +190,13 @@ export default function Profiles() {
             setEditingProfile(profile);
             // Fallback for legacy isChild
             const type = profile.type || (profile.isChild ? 'child' : 'man');
-            setFormData({ name: profile.name, color: profile.color, type });
+            setFormData({
+                name: profile.name,
+                color: profile.color,
+                type,
+                height: profile.height || '',
+                weight: profile.weight || ''
+            });
         } else {
             setEditingProfile(null);
             setFormData({ name: '', color: 'blue', type: 'man' });
@@ -201,7 +207,7 @@ export default function Profiles() {
     function closeModal() {
         setModalOpen(false);
         setEditingProfile(null);
-        setFormData({ name: '', color: 'blue', type: 'man' });
+        setFormData({ name: '', color: 'blue', type: 'man', height: '', weight: '' });
     }
 
     function toggleLanguage() {
@@ -440,6 +446,29 @@ export default function Profiles() {
                                     <span style={{ background: `var(--profile-color)` }} />
                                 </button>
                             ))}
+                        </div>
+                    </div>
+
+                    <div className="form-group-row">
+                        <div className="form-group">
+                            <label htmlFor="height">{t('height')}</label>
+                            <input
+                                id="height"
+                                type="number"
+                                placeholder="175"
+                                value={formData.height}
+                                onChange={(e) => setFormData({ ...formData, height: e.target.value })}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="weight">{t('weight')}</label>
+                            <input
+                                id="weight"
+                                type="number"
+                                placeholder="70"
+                                value={formData.weight}
+                                onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
+                            />
                         </div>
                     </div>
 

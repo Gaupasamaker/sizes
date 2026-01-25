@@ -55,10 +55,13 @@ export async function createProfile(data) {
         name: data.name,
         avatar: data.avatar || data.name.charAt(0).toUpperCase(),
         color: data.color || 'blue',
+        height: data.height || null,
+        weight: data.weight || null,
+        birthDate: data.birthDate || null,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        type: data.type || (data.isChild ? 'child' : 'man'), // Initialize type with fallback
-        lastCheck: new Date().toISOString() // Initialize lastCheck
+        type: data.type || (data.isChild ? 'child' : 'man'),
+        lastCheck: new Date().toISOString()
     };
     await db.add('profiles', profile);
     return profile;
