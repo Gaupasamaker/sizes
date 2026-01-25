@@ -357,7 +357,7 @@ export default function BrandDetail() {
                     <div className="form-group">
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <label htmlFor="sizeValue">{t('size')}</label>
-                            {profile?.height && (
+                            {profile && profile.height && (
                                 <div className="recommendation-badge" onClick={() => setSizeForm({ ...sizeForm, size: getRecommendedSize(profile, sizeForm.category) })}>
                                     <Ruler size={12} />
                                     <span>{t('recommended') || 'Sugerida'}: {getRecommendedSize(profile, sizeForm.category)}</span>
