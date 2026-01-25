@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Plus, Trash2, Edit2, AlertCircle, Camera, Image, X } from 'lucide-react';
+import { Plus, Trash2, Edit2, AlertCircle, Camera, Image, X, Ruler } from 'lucide-react';
 import Layout from '../components/Layout';
 import Modal from '../components/Modal';
 import { getBrand, updateBrand, deleteBrand, getSizesByBrand, createSize, updateSize, deleteSize, getProfile, CATEGORIES, FIT_OPTIONS } from '../services/db';
