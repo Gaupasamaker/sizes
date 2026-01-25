@@ -360,7 +360,7 @@ export default function BrandDetail() {
                             {profile && profile.height && (
                                 <div className="recommendation-badge" onClick={() => setSizeForm({ ...sizeForm, size: getRecommendedSize(profile, sizeForm.category) })}>
                                     <Ruler size={12} />
-                                    <span>{t('recommended') || 'Sugerida'}: {getRecommendedSize(profile, sizeForm.category)}</span>
+                                    <span>{t('recommended')}: {getRecommendedSize(profile, sizeForm.category)}</span>
                                 </div>
                             )}
                         </div>
