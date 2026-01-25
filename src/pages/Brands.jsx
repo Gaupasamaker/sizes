@@ -31,17 +31,6 @@ export default function Brands() {
         filterBrands();
     }, [searchQuery]);
 
-    // Update suggestions when typing brand name
-    useEffect(() => {
-        if (formData.name.length >= 1) {
-            const results = searchBrandSuggestions(formData.name);
-            setSuggestions(results);
-            setShowSuggestions(results.length > 0);
-        } else {
-            setSuggestions([]);
-            setShowSuggestions(false);
-        }
-    }, [formData.name]);
 
     async function loadData() {
         try {
@@ -89,9 +78,24 @@ export default function Brands() {
         setShowSuggestions(false);
     }
 
+    function handleBrandNameChange(e) {
+        const name = e.target.value;
+        setFormData({ ...formData, name });
+
+        if (name.length >= 1) {
+            const results = searchBrandSuggestions(name);
+            setSuggestions(results);
+            setShowSuggestions(results.length > 0);
+        } else {
+            setSuggestions([]);
+            setShowSuggestions(false);
+        }
+    }
+
     function selectSuggestion(name) {
         setFormData({ ...formData, name });
         setShowSuggestions(false);
+        setSuggestions([]);
         inputRef.current?.focus();
     }
 
@@ -201,7 +205,7 @@ export default function Brands() {
                                     type="text"
                                     placeholder={t('brand_name_placeholder')}
                                     value={formData.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                    onChange={handleBrandNameChange}
                                     onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
                                     autoFocus
                                     autoComplete="off"
